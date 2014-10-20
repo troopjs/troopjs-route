@@ -87,7 +87,7 @@ define([
 	});
 
 	return Gadget.extend({
-		"displayName" : "opt/route/gadget",
+		"displayName" : "route/gadget",
 
 		/**
 		 * @handler
