@@ -5,7 +5,12 @@ buster.testCase("troopjs-route/gadget", function (run) {
 	var assert = buster.referee.assert;
 	var refute = buster.referee.refute;
 
-	require( [ "troopjs-route/gadget", "troopjs-core/pubsub/hub" ] , function (Gadget, hub) {
+	require( [
+		"troopjs-route/gadget",
+		"troopjs-core/component/signal/start",
+		"troopjs-core/component/signal/finalize",
+		"troopjs-core/pubsub/hub"
+	] , function (Gadget, start, finalize, hub) {
 
 		run({
 			"dynamic": {
@@ -61,7 +66,7 @@ buster.testCase("troopjs-route/gadget", function (run) {
 						}
 					});
 
-					return tc.router.start();
+					return start.call(tc.router);
 				},
 				"route/set": function() {
 					var router = this.router;
@@ -230,12 +235,12 @@ buster.testCase("troopjs-route/gadget", function (run) {
 					});
 
 					return hub.publish("route/change", "/bar").then(function() {
-						return router.start().then(function() {
+						return start.call(router).then(function() {
 							refute(spy.called);
 							assert(spy404.calledWith("/bar"));
 						});
 					}).ensure(function() {
-						return router.stop();
+						return finalize.call(router);
 					});
 				},
 
@@ -249,10 +254,10 @@ buster.testCase("troopjs-route/gadget", function (run) {
 					});
 
 					return hub.publish("route/change", "/addressbook/my/letter/6/").then(function() {
-						return router.start().then(function() {
+						return start.call(router).then(function() {
 							assert.equals(3, spy.callCount, "declarative route/change");
 						});
-					}).ensure(function() { return router.stop(); });
+					}).ensure(function() { return finalize.call(router); });
 				},
 				"route/set": function() {
 					var spy = this.spy();
@@ -267,7 +272,7 @@ buster.testCase("troopjs-route/gadget", function (run) {
 						"route/set/addressbook/my/(letter/:letter)": countRoutes
 					});
 
-					return router.start().then(function() {
+					return start.call(router).then(function() {
 						return router.go("/addressbook/my/(letter/:letter)", { letter: 1 }).then(function() {
 							assert.equals(3, spy.callCount, "declarative route/set");
 						});

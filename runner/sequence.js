@@ -5,8 +5,8 @@ define([ "poly/array" ], function SequenceModule() {
 	"use strict";
 
 	/**
-	 * @class opt.route.runner.sequence
-	 * @implement core.event.emitter.runner
+	 * @class route.runner.sequence
+	 * @implement core.event.runner
 	 * @private
 	 * @static
 	 * @alias feature.runner
@@ -16,7 +16,6 @@ define([ "poly/array" ], function SequenceModule() {
 	var NULL = null;
 	var OBJECT_TOSTRING = Object.prototype.toString;
 	var CONTEXT = "context";
-	var CALLBACK = "callback";
 	var DATA = "data";
 	var HEAD = "head";
 	var NEXT = "next";
@@ -161,7 +160,7 @@ define([ "poly/array" ], function SequenceModule() {
 					}
 
 					// Apply CALLBACK and store in result
-					result = candidate[CALLBACK].apply(candidate[CONTEXT], [ path, matches ].concat(args));
+					result = candidate.apply(candidate[CONTEXT], [ path, matches ].concat(args));
 				}
 			}
 
@@ -171,7 +170,7 @@ define([ "poly/array" ], function SequenceModule() {
 		// Run 404s if none of the candidate matches the route.
 		if (!matched && type === "route/change") {
 			return fallbacks.reduce(function(result, candidate) {
-				result !== false ? candidate[CALLBACK].apply(candidate[CONTEXT], [ path ].concat(args)) : result;
+				result !== false ? candidate.apply(candidate[CONTEXT], [ path ].concat(args)) : result;
 			}, result);
 		}
 

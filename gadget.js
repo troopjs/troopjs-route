@@ -2,11 +2,10 @@
  * @license MIT http://troopjs.mit-license.org/
  */
 define([
-	"troopjs-compose/mixin/config",
 	"troopjs-core/component/gadget",
 	"./runner/sequence",
 	"when"
-], function (COMPOSE_CONF, Gadget, sequence, when) {
+], function (Gadget, sequence, when) {
 	"use strict";
 
 	/**
@@ -80,12 +79,6 @@ define([
 		return me.emit.apply(me, arguments);
 	}
 
-	// Add pragma for ROUTE special
-	COMPOSE_CONF.pragmas.push({
-		"pattern": /^route\/(change|set)(\/.*)?$/,
-		"replace": ROUTE + "/$1(\"$2\")"
-	});
-
 	return Gadget.extend({
 		"displayName" : "route/gadget",
 
@@ -121,7 +114,7 @@ define([
 		 * Handles route set
 		 * @handler
 		 * @inheritdoc #event-route/set
-		 * @localdoc Translates {@link #event-route/set} to {@link dom.hash.widget#event-hub/hash/set}
+		 * @localdoc Republishes route on hub
 		 * @fires hub/route/set
 		 */
 		"route/set": function onRouteSet(route, data) {
