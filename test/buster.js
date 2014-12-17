@@ -1,6 +1,6 @@
 var config = module.exports;
 
-config["tmp"] = {
+config["troopjs-route"] = {
     "autoRun": false,
     "environment": "browser",
     "rootPath": "../",
